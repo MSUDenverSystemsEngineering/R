@@ -132,7 +132,8 @@ Try {
 		}
 		
 		## <Perform Installation tasks here>
-		Execute-Process -Path "R-${appVersion}.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
+		$exitCode = Execute-Process -Path "R-${appVersion}.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
+		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 		
 		##*===============================================
 		##* POST-INSTALLATION
