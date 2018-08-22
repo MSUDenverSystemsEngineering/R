@@ -173,7 +173,7 @@ Try {
 		
 		# <Perform Uninstallation tasks here>
 		
-		Execute-Process -Path "C:\Program Files\R\R-3.5.1\unins000.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
+		##Execute-Process -Path "C:\Program Files\R\R-3.5.1\unins000.exe" -Parameters "/silent" -WindowStyle "Hidden" -PassThru
 		
 		##*===============================================
 		##* POST-UNINSTALLATION
