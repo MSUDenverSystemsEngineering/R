@@ -173,8 +173,7 @@ Try {
 		
 		# <Perform Uninstallation tasks here>
 		
-		$exitCode = Execute-Process -Path "C:\Program Files\R\R-3.5.1\unins000.exe" -Parameters "/silent" -WindowStyle "Hidden" -PassThru
-		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
+		Execute-Process -Path "C:\Program Files\R\R-3.5.1\unins000.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
 		
 		##*===============================================
 		##* POST-UNINSTALLATION
