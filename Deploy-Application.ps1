@@ -127,7 +127,9 @@ Try {
 		Show-InstallationProgress
 
 		## <Perform Pre-Installation tasks here>
-
+		IF (Test-Path -Path 'C:\Program Files\R\R-3.6.1') {
+			Execute-Process -Path "C:\Program Files\R\R-${appVersion}\unins000.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
+		}
 
 		##*===============================================
 		##* INSTALLATION
@@ -141,7 +143,7 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		$exitCode = Execute-Process -Path "R-${appVersion}-win.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -WaitForMsiExec -PassThru
+		$exitCode = Execute-Process -Path "R-${appVersion}-win.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
 		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 		##*===============================================
@@ -170,7 +172,6 @@ Try {
 
 		## <Perform Pre-Uninstallation tasks here>
 
-
 		##*===============================================
 		##* UNINSTALLATION
 		##*===============================================
@@ -183,7 +184,7 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
-		Execute-Process -Path "C:\Program Files\R\R-${appVersion}\unins000.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -WaitForMsiExec -PassThru
+		Execute-Process -Path "C:\Program Files\R\R-${appVersion}\unins000.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
 
 		##*===============================================
 		##* POST-UNINSTALLATION
