@@ -127,7 +127,7 @@ Try {
 		Show-InstallationProgress
 
 		## <Perform Pre-Installation tasks here>
-
+		Start-Sleep -Seconds 1
 
 		##*===============================================
 		##* INSTALLATION
