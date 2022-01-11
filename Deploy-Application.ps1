@@ -67,13 +67,13 @@ Try {
 	## Variables: Application
 	[string]$appVendor = 'R Project'
 	[string]$appName = 'R and R Commander'
-	[string]$appVersion = '4.1.1'
+	[string]$appVersion = '4.1.2'
 	[string]$appArch = 'x64'
 	[string]$appLang = 'EN'
 	[string]$appRevision = '01'
 	[string]$appScriptVersion = '1.0.0'
-	[string]$appScriptDate = '09/16/2021'
-	[string]$appScriptAuthor = 'James Hardy'
+	[string]$appScriptDate = '01/11/2022'
+	[string]$appScriptAuthor = 'Steve Patterson'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
 	[string]$installName = ''
@@ -127,8 +127,11 @@ Try {
 		Show-InstallationProgress
 
 		## <Perform Pre-Installation tasks here>
-		IF (Test-Path -Path 'C:\Program Files\R\R-3.6.1') {
-			Execute-Process -Path "C:\Program Files\R\R-${appVersion}\unins000.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
+        # Detect old version path
+        $oldversionpath = Resolve-Path "C:\Program Files\R\R*\" | Select-Object -ExpandProperty Path
+        # Use detected version to uninstall if necessary
+		IF (Test-Path -Path '$oldversionpath') {
+			Execute-Process -Path "$oldversionpath\unins000.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
 		}
 
 		##*===============================================
