@@ -133,7 +133,7 @@ Try {
         # Use detected version to uninstall if necessary
 		ForEach($paths in $oldversionpaths){
 			IF (Test-Path -Path "$paths") {
-				Write-Host "Detected old version at $paths. Removing..."
+				Write-Output "Detected old version at $paths. Removing..."
 				IF (Test-Path -Path "$paths\unins000.exe"){
 					Execute-Process -Path "$paths\unins000.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
 				}
