@@ -136,7 +136,7 @@ Try {
 				IF (Test-Path -Path "$paths") {
 					Write-Output "Detected old version at $paths. Removing..."
 					IF (Test-Path -Path "$paths\unins000.exe"){
-						Execute-Process -Path "$paths\unins000.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
+						Execute-Process -Path "$paths\unins000.exe" -Parameters "/silent" -WindowStyle "Hidden" -PassThru
 					}
 					Else{
 						Remove-Folder -Path "$paths"
@@ -202,7 +202,7 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
-		$exitCode = Execute-Process -Path "$envProgramFiles\R\R-${appVersion}\unins000.exe" -Parameters "/verysilent" -WindowStyle "Hidden" -PassThru
+		$exitCode = Execute-Process -Path "$envProgramFiles\R\R-${appVersion}\unins000.exe" -Parameters "/silent" -WindowStyle "Hidden" -PassThru
 		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 
 
@@ -265,8 +265,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU1c4tzev9r/sET0OOYM07AKgl
-# 0JqgghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUk4J9+26+/mpWRp1wQ9CEuNhp
+# tSigghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -366,13 +366,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFFA1pwtNOtnMPsGVUbOiO3BNACOfMA0GCSqGSIb3DQEBAQUABIIBgB04DmD7
-# +SlK2G+kvBoEPKk9PExIf85txCBOw6bJusW69l7aLy3f68DbKELz2uLlXvDHdVgv
-# tD44AH35SFgQPS1vXE6QOVtVhZwwLZQbngglIWlf/Yaw0/oDgGNMnVx8gVPtpRnr
-# FiG4+SSsHa8P5ZCqiJpWyy6nDLR/Slf9LkjkgdJbK7uMqMVLcayt5ZPsqNaZqrC2
-# ig7ccRK++7Zi0eOWwd6kdpBpNfXMhqFLdwc1VsKLAdid9GaYdevKYB3sF9lOKte+
-# jyLZYtEaSscOhpWmGOCa40yosaDKxwFvn1ReLACLsfOObM0eQI/bLARUVArJmknM
-# Dh1C89aTj1kTLWfYVrM2w+fFdXByzwiivr9j2Nk1DcMzSR75lLA3W37aG9OSUpfU
-# W1BGEmeaPqClytT0xtx8qSrzeEPmG3zAg7SWuQtHRU+yNWWeRyA9m5BUjY9qXL1W
-# PO7lP8QtDCu+thdxjdAWoL4/AHNpP76N0T6LauBLpY79eoZqOGTx6hTAgg==
+# MRYEFHAhuqayPV4rn68TxlJNjk5Xy+ETMA0GCSqGSIb3DQEBAQUABIIBgGBuQHCU
+# rRdxVCMpN2s24m9NtoAKyNGRaGEaMn2X39zTbAyqD/s+4m6S0t6wJrg+ktAhcDZj
+# 1JH4eyZEfb9vAkcsSwFPcXBXYoiLmBsO9MoWnuRLUBYR5J2icVvohH16mIQpCwHS
+# 5WER7e1c2Wepwp9HcGaT1yhwZOYp5HUZcM4p5pqc2Fwxz9xyW6cqcPkPFmm5btqk
+# iiehXmyb1pKc8+PPCEGnsTyDzo1U5+EwzJBcYLW5LXI4C7W/r2qoS04nAWr3X+p+
+# yIaiOeOjCAyf/wWX6KuUGBHJZd4Nq1JsW94YSEpMdl/o2MpjgJw1aCkuV6F3dNgb
+# eAbSi0Qh89fvTmX89AQa5Jj5OVfpDNpviD+qDwLP8+UU8y3T62VfEhx6ydkhTOwt
+# JB+bZShWuZUXFf0KxXz7c2PL2MMplYOwuFaMc6Cya7jzGFC1+/fcQBY6CYXkvvDo
+# KJAptw/WJlvmSQuLKhmaeDTV+CNMuRPnVExc23PaB0+GUCXqw2r4jfyixw==
 # SIG # End signature block
