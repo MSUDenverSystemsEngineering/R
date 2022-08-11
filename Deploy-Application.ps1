@@ -121,7 +121,7 @@ Try {
 		[string]$installPhase = 'Pre-Installation'
 
 		## Show Welcome Message, close Internet Explorer if required, allow up to 3 deferrals, verify there is enough disk space to complete the install, and persist the prompt
-		Show-InstallationWelcome -CloseApps 'R' -CheckDiskSpace -PersistPrompt
+		Show-InstallationWelcome -CloseApps 'R, Rgui' -CheckDiskSpace -PersistPrompt
 
 		## Show Progress Message (with the default message)
 		Show-InstallationProgress
@@ -144,6 +144,7 @@ Try {
 				}
 			}
 		}
+
 
 		##*===============================================
 		##* INSTALLATION
@@ -168,8 +169,19 @@ Try {
 		[string]$installPhase = 'Post-Installation'
 
 		## <Perform Post-Installation tasks here>
-		$exitCode = Execute-Process -Path "$envProgramFiles\R\R-${appVersion}\bin\R.exe" -Parameters "-e `"install.packages(`'Rcmdr`', repos=`'http://lib.stat.cmu.edu/R/CRAN/`', lib=`'C:\\Program Files\\R\\R-${appVersion}\\library`', dependencies=TRUE)`""
-		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
+
+		## Notes for packaging:
+		## Rather than running install.packages on every installation, do it once on a test machine and then copy the packages out of the library directory and include them in your distribution package.
+		## The manual recommends doing this for upgrades, so it should work for a same version install. https://cran.r-project.org/bin/windows/base/rw-FAQ.html#What_0027s-the-best-way-to-upgrade_003f
+
+		## Uncomment to get packages from r-project
+		##Execute-Process -Path "$envProgramFiles\R\R-${appVersion}\bin\R.exe" -Parameters "-e `"install.packages(`'Rcmdr`', repos=`'https://cloud.r-project.org/`', lib=`'C:\\Program Files\\R\\R-${appVersion}\\library`', dependencies=TRUE)`""
+
+		## Uncomment for offline package install
+		Write-Log -Message "Installing packages..." -Source 'Post-Installation' -LogType 'CMTrace'
+		Copy-Item -Path "$dirFiles\packages\*" -Destination "$envProgramFiles\R\R-4.2.1\library" -Recurse
+
+
 
 		## Display a message at the end of the install
 		If (-not $useDefaultMsi) { Show-InstallationPrompt -Message "$appName $appVersion has been successfully installed." -ButtonRightText 'OK' -Icon Information -NoWait }
@@ -182,7 +194,7 @@ Try {
 		[string]$installPhase = 'Pre-Uninstallation'
 
 		## Show Welcome Message, close Internet Explorer with a 60 second countdown before automatically closing
-		Show-InstallationWelcome -CloseApps 'R' -CloseAppsCountdown 60
+		Show-InstallationWelcome -CloseApps 'R, Rgui' -CloseAppsCountdown 60
 
 		## Show Progress Message (with the default message)
 		Show-InstallationProgress
@@ -204,6 +216,10 @@ Try {
 		# <Perform Uninstallation tasks here>
 		$exitCode = Execute-Process -Path "$envProgramFiles\R\R-${appVersion}\unins000.exe" -Parameters "/silent" -WindowStyle "Hidden" -PassThru
 		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
+		If (Test-Path -Path "$envProgramFiles\R\R-4.2.1"){
+			Remove-Folder -Path "$envProgramFiles\R\R-4.2.1"
+		}
+
 
 
 		##*===============================================
@@ -265,8 +281,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUk4J9+26+/mpWRp1wQ9CEuNhp
-# tSigghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUH6an1CmQ2IF4VxwKU8Prgrw/
+# 8hugghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -366,13 +382,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFHAhuqayPV4rn68TxlJNjk5Xy+ETMA0GCSqGSIb3DQEBAQUABIIBgGBuQHCU
-# rRdxVCMpN2s24m9NtoAKyNGRaGEaMn2X39zTbAyqD/s+4m6S0t6wJrg+ktAhcDZj
-# 1JH4eyZEfb9vAkcsSwFPcXBXYoiLmBsO9MoWnuRLUBYR5J2icVvohH16mIQpCwHS
-# 5WER7e1c2Wepwp9HcGaT1yhwZOYp5HUZcM4p5pqc2Fwxz9xyW6cqcPkPFmm5btqk
-# iiehXmyb1pKc8+PPCEGnsTyDzo1U5+EwzJBcYLW5LXI4C7W/r2qoS04nAWr3X+p+
-# yIaiOeOjCAyf/wWX6KuUGBHJZd4Nq1JsW94YSEpMdl/o2MpjgJw1aCkuV6F3dNgb
-# eAbSi0Qh89fvTmX89AQa5Jj5OVfpDNpviD+qDwLP8+UU8y3T62VfEhx6ydkhTOwt
-# JB+bZShWuZUXFf0KxXz7c2PL2MMplYOwuFaMc6Cya7jzGFC1+/fcQBY6CYXkvvDo
-# KJAptw/WJlvmSQuLKhmaeDTV+CNMuRPnVExc23PaB0+GUCXqw2r4jfyixw==
+# MRYEFLgqyM/2cdkGCA23posufY15kQOpMA0GCSqGSIb3DQEBAQUABIIBgGT1oJoH
+# gAD6skVRsoYTQ9odQN+LC+4KlPO2qaZP8ni8n3aYpuABCfiByIi+XAe+zY3TN5us
+# T2DBepP9d6HEMIdlEOTD6tpQmz0LRx02oR3HDuCkELuEHzcOprJrRmVukxpJlRbA
+# asnMl0ILtcT6y3IrJJstwasWbIBK4UDjtEBSf51XO01g/HemJBJbyylA1ELW6BZq
+# Ya6tRj9P8mVSIWyhdXUBLPSxb48/genABre4GdjR63vKBog4BIxuoqIOqj0O03vZ
+# deU5rkuNP/oq/Af9QyXbJK3pNReLzgOYZCW2KzfvLXV62BhnIS3HxS8LIrWgDH64
+# ztu9HIkLlit/nr9bPM9eSRke6RI/PtmXHt1ti42S20L5cGZCm2Wer+5XdyuFG5VI
+# V9I1RtwLqG+8t6hI0IuJKbN87kHVEF+Hq+vrnQu4gt0AGVjoxVCA2sGpwo2V5G/q
+# cfMMz0RI7iC1Q91++ODu07Z4XXNO8nyjhYzeOgCQ/WsY+KFLyLnsh/y62w==
 # SIG # End signature block
